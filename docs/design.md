@@ -25,6 +25,7 @@ The display still looks like a profile field.
 **ACP → Extensions → See Notes → Reasons**:
 
 - Administrators add, edit and reorder reasons. The list starts empty.
+- Each reason has an optional **description** (for example "Posts must be approved before they appear"), shown to staff when they hover over the reason, and a **color**, red by default, used for the mini-profile line.
 - Each reason has an **on/off switch**. Turning a reason off removes it from the list moderators pick from. Members who already have it keep their entries and notes, still shown with that reason's name. Turning it back on makes it selectable again.
 - Renaming a reason renames it everywhere it is used, since entries point to the reason rather than copying its name.
 
@@ -47,27 +48,38 @@ The display still looks like a profile field.
 - **At most one entry is current.** Staff can switch which entry is current, or set none. When none is current, nothing shows on the member's profile, but the entries and notes are still there in the MCP.
 - Each entry has its own list of **notes**, like phpBB's user notes: author, date and text. Notes are plain text, shown escaped. Notes can be edited and deleted; an edited note shows who last edited it and when.
 - Deleting an entry deletes its notes.
+- The author's and last editor's usernames are saved with each note. While they are members, their name links to their profile. If one of them is deleted, the note keeps their name as plain text with no link, the way phpBB keeps a deleted member's name on their posts. Saved names are updated when a member is renamed (`core.update_username`).
+- When the member the notes are about is deleted, their entries and notes are deleted too.
 
 ## Where it shows
 
 To staff with the "see" permission only:
 
-- **Profile** (`memberlist.php?mode=viewprofile`): "&lt;label&gt;: &lt;current reason&gt;" with the other profile details.
-- **Mini-profile** next to posts (viewtopic): the same line, next to the custom profile fields.
-- Both link to the member's page in the MCP.
+- **Profile** (`memberlist.php?mode=viewprofile`): a "&lt;label&gt;: &lt;current reason&gt; (&lt;number of notes&gt;)" row with the other profile details (name, location and so on), in the same style as those rows.
+- **Mini-profile** next to posts (viewtopic): the same line next to the custom profile fields, in bold, in the reason's color (red by default).
+- **MCP pages where moderators act on a post:** post details, reports and the approval queue, next to the poster's name.
+- All of these show the reason's description on hover and link to the member's Moderator notes tab in the MCP. The number in brackets is how many notes the current entry has.
 
-Template events available on both 3.3.x and master: `memberlist_view_non_contact_custom_fields_after` (or `memberlist_view_user_statistics_after`) and `viewtopic_body_postrow_custom_fields_after`. PHP events: `core.memberlist_view_profile`, `core.viewtopic_cache_user_data`, `core.viewtopic_modify_post_row`. The current reasons for every poster on a topic page are loaded in one query.
+Template events available on both 3.3.x and master: `memberlist_view_non_contact_custom_fields_after` and `viewtopic_body_postrow_custom_fields_after`. PHP events: `core.memberlist_view_profile`, `core.viewtopic_cache_user_data`, `core.viewtopic_modify_post_row`, and for the MCP pages `core.mcp_post_template_data`, `core.mcp_queue_get_posts_modify_post_row` and `core.mcp_report_template_data`. The current reasons for every poster on a topic page are loaded in one query.
 
 ## MCP
 
-A **See Notes** page in the MCP's Notes tab, next to phpBB's own User notes, with the same "find a member" form. For a member it lists their entries, newest first, with each entry's notes. From there staff with permission can:
+A **Moderator notes** tab in the MCP, with a "find a member" form like phpBB's User notes. Like the ACP page, its name is fixed and does not follow the label. For a member it lists their entries, newest first, with each entry's notes. From there staff with permission can:
 
 - add an entry with a reason (active reasons only),
 - set which entry is current, or none,
 - add, edit and delete notes,
 - delete an entry with its notes.
 
-Every change goes into the **moderator log**: entry added, current entry changed, entry deleted, note added, note edited, note deleted.
+Below the entries, a **phpBB user notes** box shows the member's latest few phpBB user notes (read-only), with a link to the full list. phpBB's user notes stay as they are: besides notes staff type in, phpBB writes warnings, bans, account changes and other records there automatically, and other extensions use them too. The box puts both in one place so neither gets missed. A general note that does not fit a reason can go under a reason the admins create for it, such as "General".
+
+## ACP → Manage users
+
+A **Moderator notes** page in the Manage users form list, like Feedback and Warnings. This name is fixed: it stays "Moderator notes" whatever the label is renamed to. It shows the member's entries and notes and allows the same actions as the MCP tab, including the phpBB user notes box, for administrators with the matching permissions.
+
+phpBB supports this on 3.3.x and master: the extension adds a hidden `acp_users` module with its own mode, which puts it in the form list, and handles it in `core.acp_users_mode_add`. One gap: `adm/style/acp_users.html` has no template event for an extension mode's content, and the event does not give access to the page's template name. How the page is drawn needs working out when coding starts. If there is no clean way, the extension will request the missing event from phpBB (a `docs/events/` file, as with the other extensions) rather than patch core.
+
+Every change, from either page, goes into the **moderator log**: entry added, current entry changed, entry deleted, note added, note edited, note deleted.
 
 ## Permissions
 
@@ -86,9 +98,9 @@ Moderator permissions can be set globally or per forum. Having one in any forum 
 
 | Table | Columns |
 |---|---|
-| `seenotes_reasons` | `reason_id`, `reason_title`, `reason_order`, `reason_active` |
+| `seenotes_reasons` | `reason_id`, `reason_title`, `reason_description`, `reason_color`, `reason_order`, `reason_active` |
 | `seenotes_entries` | `entry_id`, `user_id`, `reason_id`, `entry_time`, `entry_author_id`, `entry_current` |
-| `seenotes_notes` | `note_id`, `entry_id`, `note_author_id`, `note_time`, `note_text`, `note_edit_time`, `note_edit_user_id` |
+| `seenotes_notes` | `note_id`, `entry_id`, `note_author_id`, `note_author_name`, `note_time`, `note_text`, `note_edit_time`, `note_edit_user_id`, `note_edit_user_name` |
 
 Setting an entry as current clears the flag on the member's other entries in the same transaction.
 
@@ -98,9 +110,6 @@ Config: `seenotes_label` (the label) and `seenotes_allow_hard_delete` (off).
 
 Same as the other phpbbmodders extensions: `ext.php` minimum version checks (phpBB 3.3.19, PHP 7.4), `extra.version-check` once a phpBB.com listing exists, the org's strict EPV workflow plus lint and tests, screen-reader text on icon-only controls, and language strings for everything shown.
 
-## Open questions
+## Privacy
 
-1. **Deleted members:** when a member is deleted, their entries and notes are deleted too. When a staff member who wrote notes is deleted, the notes stay; should the author show as "Deleted user", or should the extension store the author's name with each note?
-2. **Where the MCP page sits:** under the Notes tab (proposed), or its own tab?
-3. **Profile placement:** with the other profile details, or in its own box?
-4. **Collapsing the admin permissions:** five matching `a_seenotes_*` permissions keep it flexible; one `a_seenotes` covering everything would keep the permission screens shorter.
+Entries and notes are records about real people. They are shown only to staff with permission, never to the member, and they are deleted when the member is deleted. phpBB has no way to export a member's data, so the documentation will say where these records are kept and how to remove them.
