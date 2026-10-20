@@ -25,7 +25,7 @@ The display still looks like a profile field.
 **ACP → Extensions → See Notes → Reasons**:
 
 - Administrators add, edit and reorder reasons. The list starts empty.
-- Each reason has an optional **description** (for example "Posts must be approved before they appear"), shown to staff when they hover over the reason, and a **color**, red by default, used for the mini-profile line.
+- Each reason has an optional **description** (for example "Posts must be approved before they appear"), shown to staff when they hover over the reason, and a **color**, red by default, used for the mini-profile line. Descriptions can be turned off for the whole board with the **Show reason descriptions** setting (on by default); when it is off, the description field is hidden in the ACP and nothing is shown on hover.
 - Each reason has an **on/off switch**. Turning a reason off removes it from the list moderators pick from. Members who already have it keep their entries and notes, still shown with that reason's name. Turning it back on makes it selectable again.
 - Renaming a reason renames it everywhere it is used, since entries point to the reason rather than copying its name.
 
@@ -58,7 +58,7 @@ To staff with the "see" permission only:
 - **Profile** (`memberlist.php?mode=viewprofile`): a "&lt;label&gt;: &lt;current reason&gt; (&lt;number of notes&gt;)" row with the other profile details (name, location and so on), in the same style as those rows.
 - **Mini-profile** next to posts (viewtopic): the same line next to the custom profile fields, in bold, in the reason's color (red by default).
 - **MCP pages where moderators act on a post:** post details, reports and the approval queue, next to the poster's name.
-- All of these show the reason's description on hover and link to the member's Moderator notes tab in the MCP. The number in brackets is how many notes the current entry has.
+- All of these show the reason's description on hover (when descriptions are turned on) and link to the member's Moderator notes tab in the MCP. The number in brackets is how many notes the current entry has.
 
 Template events available on both 3.3.x and master: `memberlist_view_non_contact_custom_fields_after` and `viewtopic_body_postrow_custom_fields_after`. PHP events: `core.memberlist_view_profile`, `core.viewtopic_cache_user_data`, `core.viewtopic_modify_post_row`, and for the MCP pages `core.mcp_post_template_data`, `core.mcp_queue_get_posts_modify_post_row` and `core.mcp_report_template_data`. The current reasons for every poster on a topic page are loaded in one query.
 
@@ -104,7 +104,7 @@ Moderator permissions can be set globally or per forum. Having one in any forum 
 
 Setting an entry as current clears the flag on the member's other entries in the same transaction.
 
-Config: `seenotes_label` (the label) and `seenotes_allow_hard_delete` (off).
+Config: `seenotes_label` (the label), `seenotes_show_descriptions` (on) and `seenotes_allow_hard_delete` (off).
 
 ## Standard extension parts
 
