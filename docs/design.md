@@ -57,10 +57,15 @@ To staff with the "see" permission only:
 
 - **Profile** (`memberlist.php?mode=viewprofile`): a "&lt;label&gt;: &lt;current reason&gt; (&lt;number of notes&gt;)" row with the other profile details (name, location and so on), in the same style as those rows.
 - **Mini-profile** next to posts (viewtopic): the same line next to the custom profile fields, in bold, in the reason's color (red by default).
-- **MCP pages where moderators act on a post:** post details, reports and the approval queue, next to the poster's name.
+- **MCP pages where moderators act on a post:** the post details, report details and approval queue details pages, as a notice above the post (where phpBB shows "This post was reported"), and the MCP topic view, after each poster's name. The queue and reports *lists* are left out: their templates have no events to add anything to, and every item in them links to its details page.
 - All of these show the reason's description on hover (when it has one) and link to the member's Moderator notes tab in the MCP. The number in brackets is how many notes the current entry has.
 
-Template events available on both 3.3.x and master: `memberlist_view_non_contact_custom_fields_after` and `viewtopic_body_postrow_custom_fields_after`. PHP events: `core.memberlist_view_profile`, `core.viewtopic_cache_user_data`, `core.viewtopic_modify_post_row`, and for the MCP pages `core.mcp_post_template_data`, `core.mcp_queue_get_posts_modify_post_row` and `core.mcp_report_template_data`. The current reasons for every poster on a topic page are loaded in one query.
+Events used, all present on both 3.3.x and master:
+
+- Profile: `core.memberlist_view_profile`; template `memberlist_view_non_contact_custom_fields_after`.
+- Mini-profile: `core.viewtopic_modify_post_data` (all posters on the page, for one query), `core.viewtopic_modify_post_row`; template `viewtopic_body_postrow_custom_fields_after`.
+- MCP details pages (all use `mcp_post.html`): `core.mcp_post_template_data`, `core.mcp_report_template_data`, `core.mcp_queue_approve_details_template`; template `mcp_post_text_before`.
+- MCP topic view: `core.mcp_topic_review_modify_row`; template `mcp_topic_post_author_full_append`.
 
 ## MCP
 
@@ -77,7 +82,7 @@ Below the entries, a **phpBB user notes** box shows the member's latest few phpB
 
 A **Moderator notes** page in the Manage users form list, like Feedback and Warnings. This name is fixed: it stays "Moderator notes" whatever the label is renamed to. It shows the member's entries and notes and allows the same actions as the MCP tab, including the phpBB user notes box, for administrators with the matching permissions.
 
-phpBB supports this on 3.3.x and master: the extension adds a hidden `acp_users` module with its own mode, which puts it in the form list, and handles it in `core.acp_users_mode_add`. One gap: `adm/style/acp_users.html` has no template event for an extension mode's content, and the event does not give access to the page's template name. How the page is drawn needs working out when coding starts. If there is no clean way, the extension will request the missing event from phpBB (a `docs/events/` file, as with the other extensions) rather than patch core.
+phpBB supports this on 3.3.x and master (added in PHPBB3-15307): the extension adds a hidden `acp_users` module with its own mode, which puts it in the form list under the language key `ACP_USER_SEENOTES`, handles it in `core.acp_users_mode_add`, and draws it through the `acp_users_mode_add` template event.
 
 Every change, from either page, goes into the **moderator log**: entry added, current entry changed, entry deleted, note added, note edited, note deleted.
 
@@ -107,6 +112,8 @@ Setting an entry as current clears the flag on the member's other entries in the
 Config: `seenotes_label` (the label), `seenotes_require_description` (off) and `seenotes_allow_hard_delete` (off).
 
 ## Standard extension parts
+
+Other events: `core.permissions`, `core.delete_user_after`, `core.update_username`. No new phpBB events are needed.
 
 Same as the other phpbbmodders extensions: `ext.php` minimum version checks (phpBB 3.3.19, PHP 7.4), `extra.version-check` once a phpBB.com listing exists, the org's strict EPV workflow plus lint and tests, screen-reader text on icon-only controls, and language strings for everything shown.
 
