@@ -19,7 +19,7 @@
 	</div>
 
 	<fieldset class="submit-buttons">
-		<input type="submit" name="submituser" value="{{ lang('SUBMIT') }}" class="button1">
+		<input type="submit" name="submituser" value="{{ lang('SUBMIT')|e('html_attr') }}" class="button1">
 	</fieldset>
 </form>
 
@@ -39,7 +39,7 @@
 					<div class="seenotes-entry-head">
 						<span class="seenotes-entry-title" id="seenotes-entry-title-{{ entry.ID }}" style="color: #{{ entry.COLOR }};">{{ entry.REASON }}</span>
 						{% if entry.S_CURRENT %}<span class="seenotes-badge">{{ lang('SEENOTES_CURRENT') }}</span>{% endif %}
-						{% if not entry.S_ACTIVE %}<span class="seenotes-badge" title="{{ lang('SEENOTES_INACTIVE_EXPLAIN') }}">{{ lang('SEENOTES_INACTIVE') }}</span>{% endif %}
+						{% if not entry.S_ACTIVE %}<span class="seenotes-badge" title="{{ lang('SEENOTES_INACTIVE_EXPLAIN')|e('html_attr') }}">{{ lang('SEENOTES_INACTIVE') }}</span>{% endif %}
 						<span>{{ entry.NOTE_COUNT }}</span>
 					</div>
 					{% if entry.DESCRIPTION %}<p>{{ entry.DESCRIPTION }}</p>{% endif %}
@@ -50,7 +50,7 @@
 						{% if S_SEENOTES_CAN_MANAGE %}
 							<a href="{{ entry.U_ADD_NOTE }}" class="button">{{ lang('SEENOTES_ADD_NOTE') }}<span class="sr-only">{{ lang('COLON') }} {{ entry.REASON }}</span></a>
 							{% if not entry.S_CURRENT %}
-							<form method="post" action="{{ U_SEENOTES_ACTION }}">
+							<form id="seenotes-set-current-{{ entry.ID }}" method="post" action="{{ U_SEENOTES_ACTION }}">
 								<button type="submit" class="button" name="action" value="set_current">{{ lang('SEENOTES_MAKE_CURRENT') }}<span class="sr-only">{{ lang('COLON') }} {{ entry.REASON }}</span></button>
 								<input type="hidden" name="entry_id" value="{{ entry.ID }}">
 								{{ S_SEENOTES_HIDDEN_USER }}
@@ -88,7 +88,7 @@
 		{% endfor %}
 
 		{% if S_SEENOTES_CAN_MANAGE and S_SEENOTES_HAS_CURRENT %}
-		<form method="post" action="{{ U_SEENOTES_ACTION }}">
+		<form id="seenotes-clear-current" method="post" action="{{ U_SEENOTES_ACTION }}">
 			<p>
 				<button type="submit" class="button" name="action" value="set_current" aria-describedby="seenotes-clear-explain">{{ lang('SEENOTES_CLEAR_CURRENT') }}</button>
 				<span id="seenotes-clear-explain">{{ lang('SEENOTES_CLEAR_CURRENT_EXPLAIN') }}</span>
@@ -134,13 +134,13 @@
 		{{ S_SEENOTES_HIDDEN_USER }}
 		{{ S_FORM_TOKEN }}
 		{% if S_SEENOTES_EDITING %}<a href="{{ U_SEENOTES_ACTION }}" class="button">{{ lang('CANCEL') }}</a>{% endif %}
-		<input type="submit" name="submit_note" value="{{ lang('SEENOTES_SAVE_NOTE') }}" class="button1">
+		<input type="submit" name="submit_note" value="{{ lang('SEENOTES_SAVE_NOTE')|e('html_attr') }}" class="button1">
 	</fieldset>
 </form>
 {% endif %}
 
 {% if S_SEENOTES_CAN_MANAGE %}
-<form method="post" action="{{ U_SEENOTES_ACTION }}">
+<form id="seenotes-add-entry" method="post" action="{{ U_SEENOTES_ACTION }}">
 	<div class="panel">
 		<div class="inner">
 			<h3>{{ lang('SEENOTES_ADD_ENTRY') }}</h3>
@@ -173,7 +173,7 @@
 		<input type="hidden" name="action" value="add_entry">
 		{{ S_SEENOTES_HIDDEN_USER }}
 		{{ S_FORM_TOKEN }}
-		<input type="submit" value="{{ lang('SEENOTES_ADD_ENTRY') }}" class="button1">
+		<input type="submit" value="{{ lang('SEENOTES_ADD_ENTRY')|e('html_attr') }}" class="button1">
 	</fieldset>
 	{% endif %}
 </form>

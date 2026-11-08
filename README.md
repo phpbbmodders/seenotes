@@ -1,3 +1,4 @@
+admin	KbTest1234!
 # See Notes
 
 [![Tests](https://github.com/phpbbmodders/seenotes/actions/workflows/tests.yml/badge.svg)](https://github.com/phpbbmodders/seenotes/actions/workflows/tests.yml) [![Lint](https://github.com/phpbbmodders/seenotes/actions/workflows/lint.yml/badge.svg)](https://github.com/phpbbmodders/seenotes/actions/workflows/lint.yml)
@@ -9,7 +10,7 @@ Lets moderators mark a member with a staff-only reason from a list the administr
 - **ACP → Extensions → See Notes → Reasons**: administrators set up the list of reasons, each with a description, a color, and an on/off switch. A switched-off reason can't be given any more, but members who have it keep it and its notes.
 - **MCP → Moderator notes** and **ACP → Manage users → Moderator notes**: give a member a reason, choose which reason is current (or none), and add notes under each reason.
 - **Notes use BBCode**, smilies and links, following the board's private message settings, so a PM sent to the member can be pasted into a quote for other staff.
-- **Only staff see it.** The current reason shows as "SEE NOTES: Moderation queue (3)" on the member's profile, next to their posts, on the MCP post, report and approval queue pages, and in the MCP topic view. It links to the notes.
+- **Only staff see it.** The current reason shows as "SEE NOTES: Moderation queue (3)" on the member's profile, next to their posts, on the MCP post, report and approval queue pages, and in the MCP topic view. It links to the notes. A member with no current reason shows "SEE NOTES: NONE", which links straight to the form that gives one.
 - The member's latest **phpBB user notes** (warnings, bans and so on) show read-only on the same page.
 - Separate permissions for seeing, adding, editing notes, deleting notes and deleting a reason entry, with matching administrator permissions.
 - Every change goes into the moderator log. Deleting a reason with all its entries is off by default, and needs the reason's name typed to confirm.

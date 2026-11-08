@@ -27,7 +27,7 @@
 		</fieldset>
 		<fieldset class="submit-buttons">
 			<legend>{{ lang('SUBMIT') }}</legend>
-			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">
+			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT')|e('html_attr') }}">
 			{{ S_FORM_TOKEN }}
 		</fieldset>
 	</form>
@@ -52,11 +52,11 @@
 		<fieldset class="submit-buttons">
 			<legend>{{ lang('SUBMIT') }}</legend>
 			{% if S_SEENOTES_DELETE_STEP2 %}
-				<input class="button1" type="submit" id="seenotes_delete_final" name="submit" value="{{ lang('SEENOTES_DELETE_FINAL') }}">
+				<input class="button1" type="submit" id="seenotes_delete_final" name="submit" value="{{ lang('SEENOTES_DELETE_FINAL')|e('html_attr') }}">
 			{% else %}
-				<input class="button1" type="submit" name="submit" value="{{ lang('SEENOTES_DELETE_CONTINUE') }}">
+				<input class="button1" type="submit" name="submit" value="{{ lang('SEENOTES_DELETE_CONTINUE')|e('html_attr') }}">
 			{% endif %}
-			<input class="button2" type="submit" name="cancel" value="{{ lang('CANCEL') }}" formnovalidate>
+			<input class="button2" type="submit" name="cancel" value="{{ lang('CANCEL')|e('html_attr') }}" formnovalidate>
 			{{ S_FORM_TOKEN }}
 		</fieldset>
 	</form>

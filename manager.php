@@ -594,20 +594,18 @@ class manager
 			$errors[] = 'SEENOTES_NOTE_EMPTY';
 		}
 
-		$warnings = generate_text_for_storage(
-			$text,
-			$uid,
-			$bitfield,
-			$options,
-			$allow_bbcode,
-			$allow_urls,
-			$allow_smilies,
-			(bool) $this->config['auth_img_pm'],
-			(bool) $this->config['auth_flash_pm'],
-			true,
-			$allow_urls,
-			'pm'
-		);
+		$allow_img = (bool) $this->config['auth_img_pm'];
+
+		// phpBB 4.0 removed the allow_flash_bbcode argument, so the later
+		// arguments sit one place earlier there
+		if (phpbb_version_compare(PHPBB_VERSION, '4.0.0-a1', '>='))
+		{
+			$warnings = generate_text_for_storage($text, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies, $allow_img, true, $allow_urls, 'pm');
+		}
+		else
+		{
+			$warnings = generate_text_for_storage($text, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies, $allow_img, (bool) $this->config['auth_flash_pm'], true, $allow_urls, 'pm');
+		}
 
 		return [
 			'text'		=> $text,
@@ -727,25 +725,41 @@ class manager
 	/**
 	 * Keep the saved names of a renamed member up to date
 	 *
+	 * Only rows written by the renamed member change, so a deleted member who
+	 * had the same name keeps it.
+	 *
 	 * @param string $old_name
 	 * @param string $new_name
 	 * @return void
 	 */
 	public function update_username($old_name, $new_name)
 	{
+		$sql = 'SELECT user_id
+			FROM ' . USERS_TABLE . "
+			WHERE username_clean = '" . $this->db->sql_escape(utf8_clean_string($new_name)) . "'";
+		$result = $this->db->sql_query($sql);
+		$user_id = (int) $this->db->sql_fetchfield('user_id');
+		$this->db->sql_freeresult($result);
+
+		if (!$user_id)
+		{
+			return;
+		}
+
 		$updates = [
-			[$this->entries_table, 'entry_author_name'],
-			[$this->notes_table, 'note_author_name'],
-			[$this->notes_table, 'note_edit_user_name'],
+			[$this->entries_table, 'entry_author_name', 'entry_author_id'],
+			[$this->notes_table, 'note_author_name', 'note_author_id'],
+			[$this->notes_table, 'note_edit_user_name', 'note_edit_user_id'],
 		];
 
 		foreach ($updates as $update)
 		{
-			list($table, $column) = $update;
+			list($table, $name_column, $id_column) = $update;
 
 			$sql = 'UPDATE ' . $table . "
-				SET $column = '" . $this->db->sql_escape($new_name) . "'
-				WHERE $column = '" . $this->db->sql_escape($old_name) . "'";
+				SET $name_column = '" . $this->db->sql_escape($new_name) . "'
+				WHERE $id_column = " . $user_id . "
+					AND $name_column = '" . $this->db->sql_escape($old_name) . "'";
 			$this->db->sql_query($sql);
 		}
 	}

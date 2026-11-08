@@ -1,6 +1,4 @@
 {% if S_SEENOTES %}
 	<dt>{{ SEENOTES_LABEL }}{{ lang('COLON') }}</dt>
-	<dd class="profile-seenotes">
-		{% if U_SEENOTES %}<a href="{{ U_SEENOTES }}" class="seenotes-reason" style="color: #{{ SEENOTES_COLOR }};"{% if SEENOTES_DESCRIPTION %} title="{{ SEENOTES_DESCRIPTION }}"{% endif %}>{% else %}<span class="seenotes-reason" style="color: #{{ SEENOTES_COLOR }};"{% if SEENOTES_DESCRIPTION %} title="{{ SEENOTES_DESCRIPTION }}"{% endif %}>{% endif %}{{ SEENOTES_REASON }} <span aria-hidden="true">({{ SEENOTES_COUNT }})</span><span class="sr-only">, {{ SEENOTES_COUNT_TEXT }}{% if SEENOTES_DESCRIPTION %}: {{ SEENOTES_DESCRIPTION }}{% endif %}{% if U_SEENOTES %}. {{ lang('SEENOTES_OPEN_NOTES') }}{% endif %}</span>{% if U_SEENOTES %}</a>{% else %}</span>{% endif %}
-	</dd>
+	<dd class="profile-seenotes">{% include '@phpbbmodders_seenotes/seenotes_reason_link.html' with {'sn': _context} only %}</dd>
 {% endif %}

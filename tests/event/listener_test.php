@@ -129,15 +129,23 @@ class listener_test extends \phpbb_test_case
 		$this->assertStringContainsString('mode=notes&amp;u=3', $row['U_SEENOTES']);
 	}
 
-	public function test_post_row_unchanged_without_a_current_reason()
+	public function test_post_row_shows_none_without_a_current_reason()
 	{
 		$this->manager->method('can')->willReturn(true);
 		$this->manager->method('get_current_for_users')->willReturn([]);
+		$this->auth->method('acl_getf_global')->willReturn(true);
+
+		// append_sid() runs its event
+		global $phpbb_dispatcher;
+		$phpbb_dispatcher = new \phpbb_mock_event_dispatcher();
 
 		$event = new data(['poster_id' => 3, 'post_row' => []]);
 		$this->get_listener()->show_on_post($event);
 
-		$this->assertSame([], $event['post_row']);
+		$row = $event['post_row'];
+		$this->assertTrue($row['S_SEENOTES_NONE']);
+		$this->assertSame('SEENOTES_NONE', $row['SEENOTES_REASON']);
+		$this->assertStringEndsWith('u=3#seenotes-add-entry', $row['U_SEENOTES']);
 	}
 
 	public function test_other_acp_users_modes_are_ignored()

@@ -202,14 +202,20 @@ class manager_test extends \phpbb_database_test_case
 		$this->assertSame([3], array_keys($manager->get_entries(4)));
 	}
 
-	public function test_renaming_updates_saved_names()
+	public function test_renaming_updates_only_the_renamed_members_names()
 	{
 		$manager = $this->get_manager();
+
+		// A deleted member (99) who had the same name as the renamed one
+		$this->db->sql_query("UPDATE phpbb_seenotes_notes SET note_author_name = 'admin' WHERE note_id = 2");
+		// phpBB renames the users row before core.update_username runs
+		$this->db->sql_query("UPDATE phpbb_users SET username = 'boss', username_clean = 'boss' WHERE user_id = 2");
+
 		$manager->update_username('admin', 'boss');
 
 		$this->assertSame('boss', $manager->get_entry(1)['entry_author_name']);
 		$this->assertSame('boss', $manager->get_note(1)['note_author_name']);
-		$this->assertSame('gone', $manager->get_note(2)['note_author_name']);
+		$this->assertSame('admin', $manager->get_note(2)['note_author_name']);
 	}
 
 	public function test_moderator_log_has_no_forum()

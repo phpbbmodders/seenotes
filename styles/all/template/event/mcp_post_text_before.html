@@ -1,5 +1,5 @@
 {% if S_SEENOTES %}
-	<p class="post-notice seenotes-notice">
+	<p class="post-notice seenotes-notice{% if S_SEENOTES_NONE %} seenotes-notice-none{% endif %}">
 		<i class="icon fa-sticky-note fa-fw" aria-hidden="true"></i>
 		{% include '@phpbbmodders_seenotes/seenotes_reason.html' with {'sn': _context} only %}
 	</p>

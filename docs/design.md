@@ -59,6 +59,7 @@ To staff with the "see" permission only:
 - **Mini-profile** next to posts (viewtopic): the same line next to the custom profile fields, in bold, in the reason's color (red by default).
 - **MCP pages where moderators act on a post:** the post details, report details and approval queue details pages, as a notice above the post (where phpBB shows "This post was reported"), and the MCP topic view, after each poster's name. The queue and reports *lists* are left out: their templates have no events to add anything to, and every item in them links to its details page.
 - All of these show the reason's description on hover (when it has one) and link to the member's Moderator notes tab in the MCP. The number in brackets is how many notes the current entry has.
+- When a member has no current reason, the same places show "<label>: NONE" in the normal text color. NONE links straight to the "Give a reason" form on the member's notes page, so staff can add one in one click.
 
 Events used, all present on both 3.3.x and master:
 

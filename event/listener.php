@@ -281,11 +281,11 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * Template variables for a member's current reason, for viewers who may
-	 * see it
+	 * Template variables for a member's current reason, or "NONE" when they
+	 * have none, for viewers who may see it
 	 *
 	 * @param int $user_id
-	 * @return array Empty when there is nothing to show
+	 * @return array Empty when the viewer may not see reasons
 	 */
 	protected function get_display_vars($user_id)
 	{
@@ -295,22 +295,36 @@ class listener implements EventSubscriberInterface
 		}
 
 		$current = $this->manager->get_current_for_users([$user_id]);
+		$u_notes = $this->get_notes_url($user_id);
+
+		// No current reason: "NONE", linking to the form that gives one
 		if (!isset($current[$user_id]))
 		{
-			return [];
+			$can_manage = $this->manager->can('manage');
+
+			return [
+				'S_SEENOTES'			=> true,
+				'S_SEENOTES_NONE'		=> true,
+				'SEENOTES_LABEL'		=> $this->manager->get_label(),
+				'SEENOTES_REASON'		=> $this->language->lang('SEENOTES_NONE'),
+				'SEENOTES_LINK_TEXT'	=> $this->language->lang($can_manage ? 'SEENOTES_NONE_GIVE' : 'SEENOTES_NONE_EXPLAIN'),
+				'U_SEENOTES'			=> ($u_notes && $can_manage) ? $u_notes . '#seenotes-add-entry' : $u_notes,
+			];
 		}
 
 		$entry = $current[$user_id];
 
 		return [
 			'S_SEENOTES'			=> true,
+			'S_SEENOTES_NONE'		=> false,
 			'SEENOTES_LABEL'		=> $this->manager->get_label(),
 			'SEENOTES_REASON'		=> $entry['reason_title'],
 			'SEENOTES_DESCRIPTION'	=> $entry['reason_description'],
 			'SEENOTES_COLOR'		=> $this->manager->clean_color($entry['reason_color']),
 			'SEENOTES_COUNT'		=> (int) $entry['note_count'],
 			'SEENOTES_COUNT_TEXT'	=> $this->language->lang('SEENOTES_NOTE_COUNT', (int) $entry['note_count']),
-			'U_SEENOTES'			=> $this->get_notes_url($user_id),
+			'SEENOTES_LINK_TEXT'	=> $this->language->lang('SEENOTES_OPEN_NOTES'),
+			'U_SEENOTES'			=> $u_notes,
 		];
 	}
 

@@ -19,3 +19,10 @@
 .seenotes-entry .content {
 	overflow-wrap: anywhere;
 }
+
+/* Links large enough to tap (WCAG 2.2 target size) */
+.seenotes-note-actions a {
+	display: inline-block;
+	min-height: 24px;
+	line-height: 24px;
+}

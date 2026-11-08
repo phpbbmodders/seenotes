@@ -29,6 +29,9 @@ $lang = array_merge($lang, [
 		2	=> '%d notes',
 	],
 	'SEENOTES_OPEN_NOTES'	=> 'Read the moderator notes about this member',
+	'SEENOTES_NONE'			=> 'NONE',
+	'SEENOTES_NONE_GIVE'	=> 'This member has no current reason. Give them one',
+	'SEENOTES_NONE_EXPLAIN'	=> 'This member has no current reason. Read the moderator notes about them',
 
 	'LOG_SEENOTES_ENTRY_ADDED'		=> '<strong>Gave a member a See Notes reason</strong><br>» %1$s, to %2$s',
 	'LOG_SEENOTES_CURRENT_SET'		=> '<strong>Changed a member’s current See Notes reason</strong><br>» %1$s, for %2$s',

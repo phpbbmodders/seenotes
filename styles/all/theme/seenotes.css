@@ -5,6 +5,14 @@
 	font-weight: bold;
 }
 
+/* Links large enough to tap (WCAG 2.2 target size) */
+a.seenotes-reason,
+.seenotes-note-actions a {
+	display: inline-block;
+	min-height: 24px;
+	line-height: 24px;
+}
+
 .seenotes-notice {
 	border-left: 4px solid currentColor;
 	padding: 4px 8px;
@@ -57,4 +65,9 @@
 
 .seenotes-note-actions a {
 	margin-left: 8px;
+}
+
+/* NONE: no current reason, so a quieter line in the normal text color */
+.seenotes-notice-none {
+	border-left-color: rgba(128, 128, 128, 0.5);
 }

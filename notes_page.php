@@ -389,7 +389,6 @@ class notes_page
 		$this->template->assign_vars([
 			'S_SEENOTES_PAGE'				=> true,
 			'SEENOTES_MEMBER'				=> get_username_string('full', $user_id, $this->member['username'], $this->member['user_colour']),
-			'SEENOTES_MEMBER_NAME'			=> $this->member['username'],
 			'SEENOTES_ERROR'				=> implode('<br>', $errors),
 			'S_SEENOTES_CAN_MANAGE'			=> $can_manage,
 			'S_SEENOTES_CAN_EDIT'			=> $can_edit,

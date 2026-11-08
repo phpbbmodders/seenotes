@@ -143,7 +143,6 @@ class main_module
 		}
 
 		$template->assign_vars([
-			'S_SEENOTES_LIST'			=> true,
 			'S_SEENOTES_HARD_DELETE'	=> !empty($config['seenotes_allow_hard_delete']),
 			'U_ACTION'					=> $this->u_action,
 			'U_SEENOTES_ADD'			=> $this->u_action . '&amp;action=add',
@@ -186,7 +185,8 @@ class main_module
 			}
 
 			$max = \phpbbmodders\seenotes\manager::TEXT_MAX_LENGTH;
-			if (utf8_strlen(htmlspecialchars_decode($reason['reason_title'], ENT_COMPAT)) > $max || utf8_strlen(htmlspecialchars_decode($reason['reason_description'], ENT_COMPAT)) > $max)
+			// Checked as stored: request input is HTML-escaped, so "&" takes five characters of the column
+			if (utf8_strlen($reason['reason_title']) > $max || utf8_strlen($reason['reason_description']) > $max)
 			{
 				$errors[] = $language->lang('SEENOTES_TEXT_TOO_LONG', $max);
 			}
