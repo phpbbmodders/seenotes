@@ -1,0 +1,5 @@
+{# The reason line. Pass the row with the SEENOTES_* values as "sn". #}
+<span class="seenotes-line{% if sn.S_SEENOTES_NONE %} seenotes-line-none{% endif %}"{% if not sn.S_SEENOTES_NONE %} style="color: #{{ sn.SEENOTES_COLOR }};"{% endif %}>
+	<strong>{{ sn.SEENOTES_LABEL }}{{ lang('COLON') }}</strong>
+	<strong>{% include '@phpbbmodders_seenotes/seenotes_reason_link.html' with {'sn': sn} only %}</strong>
+</span>

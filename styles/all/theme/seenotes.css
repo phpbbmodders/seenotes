@@ -1,0 +1,82 @@
+/* See Notes: the reason line and the Moderator notes page */
+
+.seenotes-line,
+.seenotes-line a.seenotes-reason {
+	font-weight: bold;
+}
+
+/* Note actions large enough to tap (WCAG 2.2 target size). The reason
+   link stays inline, like the profile's other links, so it lines up with
+   its label. */
+.seenotes-note-actions a {
+	display: inline-block;
+	min-height: 24px;
+	line-height: 24px;
+}
+
+.seenotes-notice {
+	border-left: 4px solid currentColor;
+	padding: 4px 8px;
+}
+
+.seenotes-entry {
+	margin-bottom: 10px;
+}
+
+.seenotes-entry-head {
+	font-size: 1.2em;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 4px 12px;
+	margin-bottom: 6px;
+}
+
+.seenotes-entry-title {
+	font-size: 1.15em;
+	font-weight: bold;
+}
+
+.seenotes-badge {
+	border: 1px solid currentColor;
+	border-radius: 3px;
+	font-size: 0.9em;
+	padding: 0 4px;
+}
+
+.seenotes-entry-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin: 6px 0;
+}
+
+.seenotes-entry-actions form {
+	display: inline;
+}
+
+.seenotes-note {
+	border-top: 1px solid rgba(128, 128, 128, 0.3);
+	padding: 6px 0;
+}
+
+.seenotes-note-meta {
+	font-size: 1.1em;
+	margin-bottom: 4px;
+}
+
+.seenotes-note-actions a {
+	margin-left: 8px;
+}
+
+/* Note text the size of post text (phpBB sizes that through .postbody) */
+.seenotes-note .content {
+	font-size: 1.3em;
+	min-height: 0;
+	overflow-x: auto;
+}
+
+/* NONE: no current reason, so a quieter line in the normal text color */
+.seenotes-notice-none {
+	border-left-color: rgba(128, 128, 128, 0.5);
+}

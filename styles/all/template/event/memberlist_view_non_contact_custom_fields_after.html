@@ -1,0 +1,4 @@
+{% if S_SEENOTES %}
+	<dt>{{ SEENOTES_LABEL }}{{ lang('COLON') }}</dt>
+	<dd class="profile-seenotes">{% include '@phpbbmodders_seenotes/seenotes_reason_link.html' with {'sn': _context} only %}</dd>
+{% endif %}
