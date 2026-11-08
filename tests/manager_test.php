@@ -164,7 +164,8 @@ class manager_test extends \phpbb_database_test_case
 		$notes = $this->get_manager()->get_notes([1]);
 
 		$this->assertSame([2, 1], array_map('intval', array_column($notes[1], 'note_id')));
-		$this->assertNull($notes[1][0]['author_username']);
+		// No users row: NULL, or '' on MSSQL, whose phpBB driver returns NULL as an empty string
+		$this->assertEmpty($notes[1][0]['author_username']);
 		$this->assertSame('gone', $notes[1][0]['note_author_name']);
 		$this->assertSame('admin', $notes[1][1]['author_username']);
 	}
