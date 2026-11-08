@@ -7,7 +7,7 @@ Lets moderators mark a member with a staff-only reason from a list the administr
 
 ## Features
 
-- **ACP → Extensions → See Notes → Reasons**: administrators set up the list of reasons, each with a description, a color, and an on/off switch. A switched-off reason can't be given any more, but members who have it keep it and its notes.
+- **ACP → Extensions → See Notes → Reasons**: administrators set up the list of reasons, each with a description, a color, and an on/off switch. Seven starter reasons (Moderation queue, Spam watch, Warez, Conduct, Possible returning member, Staff in contact, General) are added on first enable, ready to edit or remove. A switched-off reason can't be given any more, but members who have it keep it and its notes.
 - **MCP → Moderator notes** and **ACP → Manage users → Moderator notes**: give a member a reason, choose which reason is current (or none), and add notes under each reason.
 - **Notes use BBCode**, smilies and links, following the board's private message settings, so a PM sent to the member can be pasted into a quote for other staff.
 - **Only staff see it.** The current reason shows as "SEE NOTES: Moderation queue (3)" on the member's profile, next to their posts, on the MCP post, report and approval queue pages, and in the MCP topic view. It links to the notes. A member with no current reason shows "SEE NOTES: NONE", which links straight to the form that gives one.
@@ -39,7 +39,7 @@ Click an image for the full size. All screenshots, with captions: [docs/images/s
 1. Copy the extension to `/ext/phpbbmodders/seenotes`
 2. In the Administration Control Panel, go to **Customise → Manage extensions**
 3. Enable the **See Notes** extension
-4. Add your reasons under **Extensions → See Notes → Reasons**
+4. Review the starter reasons under **Extensions → See Notes → Reasons**, and add, rename or switch off any you like
 
 ## Contributing
 

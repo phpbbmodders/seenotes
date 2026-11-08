@@ -24,7 +24,7 @@ The display still looks like a profile field.
 
 **ACP → Extensions → See Notes → Reasons**:
 
-- Administrators add, edit and reorder reasons. The list starts empty.
+- Administrators add, edit and reorder reasons. Enabling the extension the first time adds seven starter reasons in the board's default language: Moderation queue, Spam watch, Warez, Conduct, Possible returning member, Staff in contact and General, each with a description and color. They are ordinary reasons from then on. A board that already has reasons gets none.
 - Each reason has a **description** (for example "Posts must be approved before they appear"), shown to staff when they hover over the reason, and a **color**, red by default, used for the mini-profile line. The **Require a description for each reason** setting (off by default) makes the description required: when it is on, a reason cannot be saved without one. Turning it on does not change existing reasons, but one without a description must get one the next time it is edited.
 - Each reason has an **on/off switch**. Turning a reason off removes it from the list moderators pick from. Members who already have it keep their entries and notes, still shown with that reason's name. Turning it back on makes it selectable again.
 - Renaming a reason renames it everywhere it is used, since entries point to the reason rather than copying its name.
