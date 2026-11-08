@@ -25,7 +25,7 @@ class default_reasons extends \phpbb\db\migration\migration
 	 */
 	const REASONS = [
 		'SEENOTES_DEFAULT_QUEUE'	=> 'AA0000',
-		'SEENOTES_DEFAULT_SPAM'		=> 'C05800',
+		'SEENOTES_DEFAULT_SPAM'		=> 'A04800',
 		'SEENOTES_DEFAULT_WAREZ'	=> '7B0000',
 		'SEENOTES_DEFAULT_CONDUCT'	=> '8C5A00',
 		'SEENOTES_DEFAULT_RETURNING'=> '6B2C91',
