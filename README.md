@@ -31,7 +31,7 @@ Click an image for the full size. All screenshots, with captions: [docs/images/s
 
 ## Requirements
 
-- phpBB 3.3.19 or later, including phpBB 4.0
+- phpBB 3.3.19 or later, including phpBB 4.0 (tested on its 4.0.0-a3 development version)
 - PHP 8.3.36 or later
 
 ## Installation
