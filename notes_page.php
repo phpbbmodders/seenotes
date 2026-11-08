@@ -97,7 +97,8 @@ class notes_page
 		$this->u_action = $u_action;
 		$this->in_acp = $in_acp;
 
-		$this->language->add_lang(['posting', 'mcp']);
+		// acp/common holds the phpBB user-note log strings, as on core's own notes page
+		$this->language->add_lang(['posting', 'mcp', 'acp/common']);
 		$this->language->add_lang('seenotes', 'phpbbmodders/seenotes');
 
 		if (!$this->manager->can('view'))

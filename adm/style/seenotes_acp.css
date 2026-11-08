@@ -17,10 +17,28 @@
 }
 
 .seenotes-entry .content {
-	overflow-wrap: anywhere;
+	overflow-wrap: break-word;
+}
+
+/* The ACP has no BBCode styles, so give quotes in notes a frame */
+.seenotes-entry .content blockquote {
+	background-color: #F6F6F0;
+	border: 1px solid #DBDBCE;
+	margin: 6px 1px 6px 12px;
+	padding: 5px 8px;
+}
+
+.seenotes-entry .content blockquote cite {
+	display: block;
+	font-style: normal;
+	font-weight: bold;
 }
 
 /* Links large enough to tap (WCAG 2.2 target size) */
+.seenotes-note-actions {
+	white-space: nowrap;
+}
+
 .seenotes-note-actions a {
 	display: inline-block;
 	min-height: 24px;
