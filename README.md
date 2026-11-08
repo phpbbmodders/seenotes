@@ -24,7 +24,7 @@ The full design is in [`docs/design.md`](docs/design.md).
 <table>
 <tr>
 <td><a href="docs/images/screenshots/seenotes-mcp-notes.png"><img src="docs/images/screenshots/seenotes-mcp-notes.png" width="440" height="591" alt="MCP Moderator notes page for a member"></a></td>
-<td><a href="docs/images/screenshots/seenotes-mcp-post.png"><img src="docs/images/screenshots/seenotes-mcp-post.png" width="440" height="300" alt="MCP post details with a SEE NOTES notice"></a><br><br><a href="docs/images/screenshots/seenotes-viewtopic.png"><img src="docs/images/screenshots/seenotes-viewtopic.png" width="440" height="58" alt="The reason in a post's mini-profile"></a><br><br><a href="docs/images/screenshots/seenotes-post-button.png"><img src="docs/images/screenshots/seenotes-post-button.png" width="440" height="58" alt="The Moderator notes button next to a post by a member without a reason"></a></td>
+<td><a href="docs/images/screenshots/seenotes-mcp-post.png"><img src="docs/images/screenshots/seenotes-mcp-post.png" width="440" height="300" alt="MCP post details with a SEE NOTES notice"></a><br><br><a href="docs/images/screenshots/seenotes-viewtopic.png"><img src="docs/images/screenshots/seenotes-viewtopic.png" width="440" height="58" alt="The reason in a post's mini-profile"></a><br><br><a href="docs/images/screenshots/seenotes-post-button.png"><img src="docs/images/screenshots/seenotes-post-button.png" width="440" height="64" alt="The Moderator notes button next to a post by a member without a reason"></a></td>
 </tr>
 </table>
 
