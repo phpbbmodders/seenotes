@@ -18,6 +18,17 @@ Lets moderators mark a member with a staff-only reason from a list the administr
 
 The full design is in [`docs/design.md`](docs/design.md).
 
+## Screenshots
+
+<table>
+<tr>
+<td><a href="docs/images/screenshots/seenotes-mcp-notes.png"><img src="docs/images/screenshots/seenotes-mcp-notes.png" width="440" height="591" alt="MCP Moderator notes page for a member"></a></td>
+<td><a href="docs/images/screenshots/seenotes-mcp-post.png"><img src="docs/images/screenshots/seenotes-mcp-post.png" width="440" height="300" alt="MCP post details with a SEE NOTES notice"></a><br><br><a href="docs/images/screenshots/seenotes-viewtopic.png"><img src="docs/images/screenshots/seenotes-viewtopic.png" width="440" height="58" alt="The reason in a post's mini-profile"></a><br><br><a href="docs/images/screenshots/seenotes-profile-none.png"><img src="docs/images/screenshots/seenotes-profile-none.png" width="440" height="113" alt="SEE NOTES: NONE on a profile"></a></td>
+</tr>
+</table>
+
+Click an image for the full size. All screenshots, with captions: [docs/images/screenshots](docs/images/screenshots/README.md).
+
 ## Requirements
 
 - phpBB 3.3.19 or later, including phpBB 4.0
