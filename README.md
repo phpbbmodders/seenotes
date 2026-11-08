@@ -10,7 +10,8 @@ Lets moderators mark a member with a staff-only reason from a list the administr
 - **ACP → Extensions → See Notes → Reasons**: administrators set up the list of reasons, each with a description, a color, and an on/off switch. Seven starter reasons (Moderation queue, Spam watch, Warez, Conduct, Possible returning member, Staff in contact, General) are added on first enable, ready to edit or remove. A switched-off reason can't be given any more, but members who have it keep it and its notes.
 - **MCP → Moderator notes** and **ACP → Manage users → Moderator notes**: give a member a reason, choose which reason is current (or none), and add notes under each reason.
 - **Notes use BBCode**, smilies and links, following the board's private message settings, so a PM sent to the member can be pasted into a quote for other staff.
-- **Only staff see it.** The current reason shows as "SEE NOTES: Moderation queue (3)" on the member's profile, next to their posts, on the MCP post, report and approval queue pages, and in the MCP topic view. It links to the notes. A member with no current reason shows "SEE NOTES: NONE", which links straight to the form that gives one.
+- **Only staff see it.** The current reason shows as "SEE NOTES: Moderation queue (3)" on the member's profile, next to their posts, on the MCP post, report and approval queue pages, and in the MCP topic view. It links to the notes, and shows only while the member has a current reason.
+- **A notes button** next to every post (beside phpBB's Warn button) and a **Moderator notes** link on every profile take staff straight to a member's notes, or to the form that gives a reason when the member has none.
 - The member's latest **phpBB user notes** (warnings, bans and so on) show read-only on the same page.
 - Separate permissions for seeing, adding, editing notes, deleting notes and deleting a reason entry, with matching administrator permissions.
 - Every change goes into the moderator log. Deleting a reason with all its entries is off by default, and needs the reason's name typed to confirm.
@@ -23,7 +24,7 @@ The full design is in [`docs/design.md`](docs/design.md).
 <table>
 <tr>
 <td><a href="docs/images/screenshots/seenotes-mcp-notes.png"><img src="docs/images/screenshots/seenotes-mcp-notes.png" width="440" height="591" alt="MCP Moderator notes page for a member"></a></td>
-<td><a href="docs/images/screenshots/seenotes-mcp-post.png"><img src="docs/images/screenshots/seenotes-mcp-post.png" width="440" height="300" alt="MCP post details with a SEE NOTES notice"></a><br><br><a href="docs/images/screenshots/seenotes-viewtopic.png"><img src="docs/images/screenshots/seenotes-viewtopic.png" width="440" height="58" alt="The reason in a post's mini-profile"></a><br><br><a href="docs/images/screenshots/seenotes-profile-none.png"><img src="docs/images/screenshots/seenotes-profile-none.png" width="440" height="113" alt="SEE NOTES: NONE on a profile"></a></td>
+<td><a href="docs/images/screenshots/seenotes-mcp-post.png"><img src="docs/images/screenshots/seenotes-mcp-post.png" width="440" height="300" alt="MCP post details with a SEE NOTES notice"></a><br><br><a href="docs/images/screenshots/seenotes-viewtopic.png"><img src="docs/images/screenshots/seenotes-viewtopic.png" width="440" height="58" alt="The reason in a post's mini-profile"></a><br><br><a href="docs/images/screenshots/seenotes-post-button.png"><img src="docs/images/screenshots/seenotes-post-button.png" width="440" height="58" alt="The Moderator notes button next to a post by a member without a reason"></a></td>
 </tr>
 </table>
 

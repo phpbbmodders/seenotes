@@ -142,24 +142,31 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * Load the stylesheet for staff who may see reasons
+	 * Load the stylesheet for staff who may see reasons, and tell the
+	 * templates which phpBB branch draws the post buttons
 	 *
 	 * @return void
 	 */
 	public function load_stylesheet()
 	{
-		$this->template->assign_var('S_SEENOTES_CSS', $this->manager->can('view'));
+		$this->template->assign_vars([
+			'S_SEENOTES_CSS'	=> $this->manager->can('view'),
+			// phpBB 4.0 draws post button icons with its Icon() function
+			'S_SEENOTES_PHPBB4'	=> phpbb_version_compare(PHPBB_VERSION, '4.0.0-a1', '>='),
+		]);
 	}
 
 	/**
-	 * Show the member's current reason with the profile details
+	 * Show the member's current reason with the profile details, and the
+	 * link to their notes with the user statistics
 	 *
 	 * @param data $event
 	 * @return void
 	 */
 	public function show_on_profile(data $event)
 	{
-		$this->template->assign_vars($this->get_display_vars((int) $event['member']['user_id']));
+		$user_id = (int) $event['member']['user_id'];
+		$this->template->assign_vars(array_merge($this->get_display_vars($user_id), $this->get_button_vars($user_id)));
 	}
 
 	/**
@@ -178,14 +185,16 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * Show the poster's current reason in their mini-profile
+	 * Show the poster's current reason in their mini-profile, and the notes
+	 * button with the post buttons
 	 *
 	 * @param data $event
 	 * @return void
 	 */
 	public function show_on_post(data $event)
 	{
-		$vars = $this->get_display_vars((int) $event['poster_id']);
+		$poster_id = (int) $event['poster_id'];
+		$vars = array_merge($this->get_display_vars($poster_id), $this->get_button_vars($poster_id));
 		if ($vars)
 		{
 			$event['post_row'] = array_merge($event['post_row'], $vars);
@@ -281,51 +290,80 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * Template variables for a member's current reason, or "NONE" when they
-	 * have none, for viewers who may see it
+	 * Template variables for a member's current reason, for viewers who may
+	 * see it
 	 *
 	 * @param int $user_id
-	 * @return array Empty when the viewer may not see reasons
+	 * @return array Empty when there is nothing to show
 	 */
 	protected function get_display_vars($user_id)
 	{
-		if (!$user_id || $user_id == ANONYMOUS || !$this->manager->can('view'))
+		if (!$this->can_view_member($user_id))
 		{
 			return [];
 		}
 
 		$current = $this->manager->get_current_for_users([$user_id]);
-		$u_notes = $this->get_notes_url($user_id);
-
-		// No current reason: "NONE", linking to the form that gives one
 		if (!isset($current[$user_id]))
 		{
-			$can_manage = $this->manager->can('manage');
-
-			return [
-				'S_SEENOTES'			=> true,
-				'S_SEENOTES_NONE'		=> true,
-				'SEENOTES_LABEL'		=> $this->manager->get_label(),
-				'SEENOTES_REASON'		=> $this->language->lang('SEENOTES_NONE'),
-				'SEENOTES_LINK_TEXT'	=> $this->language->lang($can_manage ? 'SEENOTES_NONE_GIVE' : 'SEENOTES_NONE_EXPLAIN'),
-				'U_SEENOTES'			=> ($u_notes && $can_manage) ? $u_notes . '#seenotes-add-entry' : $u_notes,
-			];
+			return [];
 		}
 
 		$entry = $current[$user_id];
 
 		return [
 			'S_SEENOTES'			=> true,
-			'S_SEENOTES_NONE'		=> false,
 			'SEENOTES_LABEL'		=> $this->manager->get_label(),
 			'SEENOTES_REASON'		=> $entry['reason_title'],
 			'SEENOTES_DESCRIPTION'	=> $entry['reason_description'],
 			'SEENOTES_COLOR'		=> $this->manager->clean_color($entry['reason_color']),
 			'SEENOTES_COUNT'		=> (int) $entry['note_count'],
 			'SEENOTES_COUNT_TEXT'	=> $this->language->lang('SEENOTES_NOTE_COUNT', (int) $entry['note_count']),
-			'SEENOTES_LINK_TEXT'	=> $this->language->lang('SEENOTES_OPEN_NOTES'),
-			'U_SEENOTES'			=> $u_notes,
+			'U_SEENOTES'			=> $this->get_notes_url($user_id),
 		];
+	}
+
+	/**
+	 * Template variables for the notes button next to posts and the link on
+	 * the profile, shown to staff whether or not the member has a reason.
+	 * Without a current reason, staff who may give one land on that form.
+	 *
+	 * @param int $user_id
+	 * @return array Empty when the viewer may not see notes or reach them
+	 */
+	protected function get_button_vars($user_id)
+	{
+		if (!$this->can_view_member($user_id))
+		{
+			return [];
+		}
+
+		$u_notes = $this->get_notes_url($user_id);
+		if ($u_notes === '')
+		{
+			return [];
+		}
+
+		$current = $this->manager->get_current_for_users([$user_id]);
+		if (!isset($current[$user_id]) && $this->manager->can('manage'))
+		{
+			$u_notes .= '#seenotes-add-entry';
+		}
+
+		return [
+			'U_SEENOTES_NOTES'	=> $u_notes,
+		];
+	}
+
+	/**
+	 * Whether the viewer may see See Notes for this member
+	 *
+	 * @param int $user_id
+	 * @return bool
+	 */
+	protected function can_view_member($user_id)
+	{
+		return $user_id && $user_id != ANONYMOUS && $this->manager->can('view');
 	}
 
 	/**

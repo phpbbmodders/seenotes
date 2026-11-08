@@ -59,7 +59,8 @@ To staff with the "see" permission only:
 - **Mini-profile** next to posts (viewtopic): the same line next to the custom profile fields, in bold, in the reason's color (red by default).
 - **MCP pages where moderators act on a post:** the post details, report details and approval queue details pages, as a notice above the post (where phpBB shows "This post was reported"), and the MCP topic view, after each poster's name. The queue and reports *lists* are left out: their templates have no events to add anything to, and every item in them links to its details page.
 - All of these show the reason's description on hover (when it has one) and link to the member's Moderator notes tab in the MCP. The number in brackets is how many notes the current entry has.
-- When a member has no current reason, the same places show "<label>: NONE" in the normal text color. NONE links straight to the "Give a reason" form on the member's notes page, so staff can add one in one click.
+- When a member has no current reason, nothing shows in these places.
+- Staff with the "see" permission also get a way into any member's notes, whether or not they have a reason: a **Moderator notes** button with the post buttons (next to phpBB's Warn button, template event `viewtopic_body_post_buttons_after`) and a **Moderator notes** link with the profile's user statistics (`memberlist_view_user_statistics_after`). Without a current reason, staff who may give one land on the "Give a reason" form. phpBB 4.0 draws post button icons with its `Icon()` Twig function, which phpBB 3.3 cannot compile, so the button has one template per branch.
 
 Events used, all present on both 3.3.x and master:
 
