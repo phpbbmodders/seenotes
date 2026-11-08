@@ -5,8 +5,9 @@
 	font-weight: bold;
 }
 
-/* Links large enough to tap (WCAG 2.2 target size) */
-a.seenotes-reason,
+/* Note actions large enough to tap (WCAG 2.2 target size). The reason
+   link stays inline, like the profile's other links, so it lines up with
+   its label. */
 .seenotes-note-actions a {
 	display: inline-block;
 	min-height: 24px;
@@ -23,6 +24,7 @@ a.seenotes-reason,
 }
 
 .seenotes-entry-head {
+	font-size: 1.2em;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
@@ -31,7 +33,7 @@ a.seenotes-reason,
 }
 
 .seenotes-entry-title {
-	font-size: 1.2em;
+	font-size: 1.15em;
 	font-weight: bold;
 }
 
@@ -59,12 +61,19 @@ a.seenotes-reason,
 }
 
 .seenotes-note-meta {
-	font-size: 0.9em;
+	font-size: 1.1em;
 	margin-bottom: 4px;
 }
 
 .seenotes-note-actions a {
 	margin-left: 8px;
+}
+
+/* Note text the size of post text (phpBB sizes that through .postbody) */
+.seenotes-note .content {
+	font-size: 1.3em;
+	min-height: 0;
+	overflow-x: auto;
 }
 
 /* NONE: no current reason, so a quieter line in the normal text color */
