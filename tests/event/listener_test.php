@@ -127,9 +127,10 @@ class listener_test extends \phpbb_test_case
 		$this->assertSame('Moderation queue', $row['SEENOTES_REASON']);
 		$this->assertSame(2, $row['SEENOTES_COUNT']);
 		$this->assertStringContainsString('mode=notes&amp;u=3', $row['U_SEENOTES']);
+		$this->assertStringEndsWith('u=3', $row['U_SEENOTES_NOTES']);
 	}
 
-	public function test_post_row_shows_none_without_a_current_reason()
+	public function test_post_row_without_a_current_reason_gets_only_the_button()
 	{
 		$this->manager->method('can')->willReturn(true);
 		$this->manager->method('get_current_for_users')->willReturn([]);
@@ -143,9 +144,8 @@ class listener_test extends \phpbb_test_case
 		$this->get_listener()->show_on_post($event);
 
 		$row = $event['post_row'];
-		$this->assertTrue($row['S_SEENOTES_NONE']);
-		$this->assertSame('SEENOTES_NONE', $row['SEENOTES_REASON']);
-		$this->assertStringEndsWith('u=3#seenotes-add-entry', $row['U_SEENOTES']);
+		$this->assertArrayNotHasKey('S_SEENOTES', $row);
+		$this->assertStringEndsWith('u=3#seenotes-add-entry', $row['U_SEENOTES_NOTES']);
 	}
 
 	public function test_other_acp_users_modes_are_ignored()

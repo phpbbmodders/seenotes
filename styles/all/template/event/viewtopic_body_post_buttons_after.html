@@ -1,0 +1,4 @@
+{% if postrow.U_SEENOTES_NOTES %}
+	{# phpBB 4.0 draws post button icons with Icon(), which phpBB 3.3 cannot compile, so each branch has its own button #}
+	{% include S_SEENOTES_PHPBB4 ? '@phpbbmodders_seenotes/seenotes_post_button_40.html' : '@phpbbmodders_seenotes/seenotes_post_button_33.html' %}
+{% endif %}

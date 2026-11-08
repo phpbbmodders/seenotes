@@ -10,15 +10,15 @@ The current reason in the poster's mini-profile, in the reason's color, with the
 
 ## Profile
 
-The reason with the other profile details.
+The reason with the other profile details, and the Moderator notes link with the user statistics.
 
-<a href="seenotes-profile.png"><img src="seenotes-profile.png" width="640" height="164" alt="A profile showing SEE NOTES: Moderation queue (2)"></a>
+<a href="seenotes-profile.png"><img src="seenotes-profile.png" width="640" height="174" alt="A profile showing SEE NOTES: Moderation queue (2)"></a>
 
-## No current reason
+## The notes button
 
-A member without a current reason shows NONE, which links straight to the form that gives one.
+Every post gets a Moderator notes button for staff, next to phpBB's Warn button. Here the member has no current reason, so no SEE NOTES line shows, and the button opens the form that gives one.
 
-<a href="seenotes-profile-none.png"><img src="seenotes-profile-none.png" width="640" height="164" alt="A profile showing SEE NOTES: NONE"></a>
+<a href="seenotes-post-button.png"><img src="seenotes-post-button.png" width="640" height="93" alt="A post with the Moderator notes button, by a member without a reason"></a>
 
 ## MCP post details
 
