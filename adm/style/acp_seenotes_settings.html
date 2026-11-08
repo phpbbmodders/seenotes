@@ -1,0 +1,31 @@
+{% include 'overall_header.html' %}
+
+<h1>{{ lang('ACP_SEENOTES') }}</h1>
+<p>{{ lang('ACP_SEENOTES_SETTINGS_EXPLAIN') }}</p>
+
+<form id="acp_seenotes_settings" method="post" action="{{ U_ACTION }}">
+	<fieldset>
+		<legend>{{ lang('ACP_SEENOTES_SETTINGS') }}</legend>
+		<dl>
+			<dt><label for="seenotes_label">{{ lang('SEENOTES_LABEL') }}{{ lang('COLON') }}</label><br><span id="seenotes_label_explain">{{ lang('SEENOTES_LABEL_EXPLAIN') }}</span></dt>
+			<dd><input type="text" id="seenotes_label" name="seenotes_label" value="{{ SEENOTES_LABEL }}" maxlength="{{ SEENOTES_LABEL_MAX_LENGTH }}" required aria-describedby="seenotes_label_explain"></dd>
+		</dl>
+		<dl>
+			<dt><label for="seenotes_require_description">{{ lang('SEENOTES_REQUIRE_DESCRIPTION') }}{{ lang('COLON') }}</label><br><span id="seenotes_require_description_explain">{{ lang('SEENOTES_REQUIRE_DESCRIPTION_EXPLAIN') }}</span></dt>
+			<dd><input type="checkbox" class="radio" id="seenotes_require_description" name="seenotes_require_description" value="1" aria-describedby="seenotes_require_description_explain"{% if S_SEENOTES_REQUIRE_DESCRIPTION %} checked{% endif %}></dd>
+		</dl>
+		<dl>
+			<dt><label for="seenotes_allow_hard_delete">{{ lang('SEENOTES_ALLOW_HARD_DELETE') }}{{ lang('COLON') }}</label><br><span id="seenotes_allow_hard_delete_explain">{{ lang('SEENOTES_ALLOW_HARD_DELETE_EXPLAIN') }}</span></dt>
+			<dd><input type="checkbox" class="radio" id="seenotes_allow_hard_delete" name="seenotes_allow_hard_delete" value="1" aria-describedby="seenotes_allow_hard_delete_explain"{% if S_SEENOTES_ALLOW_HARD_DELETE %} checked{% endif %}></dd>
+		</dl>
+	</fieldset>
+
+	<fieldset class="submit-buttons">
+		<legend>{{ lang('SUBMIT') }}</legend>
+		<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}">
+		{{ S_FORM_TOKEN }}
+	</fieldset>
+</form>
+
+{% include 'overall_footer.html' %}

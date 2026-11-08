@@ -1,0 +1,5 @@
+{# The reason line. Pass the row with the SEENOTES_* values as "sn". #}
+<span class="seenotes-line" style="color: #{{ sn.SEENOTES_COLOR }};">
+	<strong>{{ sn.SEENOTES_LABEL }}{{ lang('COLON') }}</strong>
+	{% if sn.U_SEENOTES %}<a href="{{ sn.U_SEENOTES }}" class="seenotes-reason" style="color: #{{ sn.SEENOTES_COLOR }};"{% if sn.SEENOTES_DESCRIPTION %} title="{{ sn.SEENOTES_DESCRIPTION }}"{% endif %}>{% else %}<span class="seenotes-reason"{% if sn.SEENOTES_DESCRIPTION %} title="{{ sn.SEENOTES_DESCRIPTION }}"{% endif %}>{% endif %}<strong>{{ sn.SEENOTES_REASON }} <span aria-hidden="true">({{ sn.SEENOTES_COUNT }})</span></strong><span class="sr-only">, {{ sn.SEENOTES_COUNT_TEXT }}{% if sn.SEENOTES_DESCRIPTION %}: {{ sn.SEENOTES_DESCRIPTION }}{% endif %}{% if sn.U_SEENOTES %}. {{ lang('SEENOTES_OPEN_NOTES') }}{% endif %}</span>{% if sn.U_SEENOTES %}</a>{% else %}</span>{% endif %}
+</span>

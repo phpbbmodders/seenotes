@@ -1,0 +1,43 @@
+parameters:
+    tables.phpbbmodders.seenotes.reasons: '%core.table_prefix%seenotes_reasons'
+    tables.phpbbmodders.seenotes.entries: '%core.table_prefix%seenotes_entries'
+    tables.phpbbmodders.seenotes.notes: '%core.table_prefix%seenotes_notes'
+
+services:
+    phpbbmodders.seenotes.manager:
+        class: phpbbmodders\seenotes\manager
+        arguments:
+            - '@auth'
+            - '@config'
+            - '@dbal.conn'
+            - '@log'
+            - '@user'
+            - '%tables.phpbbmodders.seenotes.reasons%'
+            - '%tables.phpbbmodders.seenotes.entries%'
+            - '%tables.phpbbmodders.seenotes.notes%'
+
+    phpbbmodders.seenotes.notes_page:
+        class: phpbbmodders\seenotes\notes_page
+        arguments:
+            - '@language'
+            - '@log'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '@phpbbmodders.seenotes.manager'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+
+    phpbbmodders.seenotes.listener:
+        class: phpbbmodders\seenotes\event\listener
+        arguments:
+            - '@auth'
+            - '@language'
+            - '@template'
+            - '@user'
+            - '@phpbbmodders.seenotes.manager'
+            - '@phpbbmodders.seenotes.notes_page'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+        tags:
+            - { name: event.listener }

@@ -1,0 +1,214 @@
+{% include 'mcp_header.html' %}
+
+<h2>{{ lang('MCP_SEENOTES_NOTES') }}</h2>
+
+{% if S_SEENOTES_FRONT %}
+
+<form method="post" id="mcp" action="{{ U_SEENOTES_FIND }}">
+	<div class="panel">
+		<div class="inner">
+			<p>{{ lang('SEENOTES_FIND_EXPLAIN') }}</p>
+			<fieldset>
+				<dl>
+					<dt><label for="username">{{ lang('SELECT_USER') }}{{ lang('COLON') }}</label></dt>
+					<dd><input name="username" id="username" type="text" class="inputbox" autocomplete="off" required></dd>
+					<dd><strong><a href="{{ U_FIND_USERNAME }}" onclick="find_username(this.href); return false;">{{ lang('FIND_USERNAME') }}</a></strong></dd>
+				</dl>
+			</fieldset>
+		</div>
+	</div>
+
+	<fieldset class="submit-buttons">
+		<input type="submit" name="submituser" value="{{ lang('SUBMIT') }}" class="button1">
+	</fieldset>
+</form>
+
+{% else %}
+
+<div class="panel">
+	<div class="inner">
+		<h3>{{ SEENOTES_MEMBER }}</h3>
+
+		{% if SEENOTES_ERROR %}<p class="error" role="alert">{{ SEENOTES_ERROR }}</p>{% endif %}
+
+		<h4>{{ lang('SEENOTES_ENTRIES') }}</h4>
+
+		{% for entry in loops.seenotes_entries %}
+			<section class="seenotes-entry bg{% if loop.index is odd %}1{% else %}2{% endif %}" id="seenotes-entry-{{ entry.ID }}" aria-labelledby="seenotes-entry-title-{{ entry.ID }}">
+				<div class="inner">
+					<div class="seenotes-entry-head">
+						<span class="seenotes-entry-title" id="seenotes-entry-title-{{ entry.ID }}" style="color: #{{ entry.COLOR }};">{{ entry.REASON }}</span>
+						{% if entry.S_CURRENT %}<span class="seenotes-badge">{{ lang('SEENOTES_CURRENT') }}</span>{% endif %}
+						{% if not entry.S_ACTIVE %}<span class="seenotes-badge" title="{{ lang('SEENOTES_INACTIVE_EXPLAIN') }}">{{ lang('SEENOTES_INACTIVE') }}</span>{% endif %}
+						<span>{{ entry.NOTE_COUNT }}</span>
+					</div>
+					{% if entry.DESCRIPTION %}<p>{{ entry.DESCRIPTION }}</p>{% endif %}
+					<p class="seenotes-note-meta">{{ lang('SEENOTES_ADDED_BY', entry.AUTHOR, entry.TIME) }}</p>
+
+					{% if S_SEENOTES_CAN_MANAGE or S_SEENOTES_CAN_DELETE_ENTRY %}
+					<div class="seenotes-entry-actions">
+						{% if S_SEENOTES_CAN_MANAGE %}
+							<a href="{{ entry.U_ADD_NOTE }}" class="button">{{ lang('SEENOTES_ADD_NOTE') }}<span class="sr-only">{{ lang('COLON') }} {{ entry.REASON }}</span></a>
+							{% if not entry.S_CURRENT %}
+							<form method="post" action="{{ U_SEENOTES_ACTION }}">
+								<button type="submit" class="button" name="action" value="set_current">{{ lang('SEENOTES_MAKE_CURRENT') }}<span class="sr-only">{{ lang('COLON') }} {{ entry.REASON }}</span></button>
+								<input type="hidden" name="entry_id" value="{{ entry.ID }}">
+								{{ S_SEENOTES_HIDDEN_USER }}
+								{{ S_FORM_TOKEN }}
+							</form>
+							{% endif %}
+						{% endif %}
+						{% if S_SEENOTES_CAN_DELETE_ENTRY %}
+							<a href="{{ entry.U_DELETE }}" class="button">{{ lang('SEENOTES_DELETE_ENTRY') }}<span class="sr-only">{{ lang('COLON') }} {{ entry.REASON }}</span></a>
+						{% endif %}
+					</div>
+					{% endif %}
+
+					{% for note in entry.notes %}
+						<article class="seenotes-note" id="seenotes-note-{{ note.ID }}">
+							<div class="seenotes-note-meta">
+								{{ lang('SEENOTES_NOTE_BY', note.AUTHOR, note.TIME) }}
+								{% if S_SEENOTES_CAN_EDIT or S_SEENOTES_CAN_DELETE_NOTE %}
+								<span class="seenotes-note-actions">
+									{% if S_SEENOTES_CAN_EDIT %}<a href="{{ note.U_EDIT }}">{{ lang('SEENOTES_EDIT_NOTE') }}<span class="sr-only">, {{ note.TIME }}</span></a>{% endif %}
+									{% if S_SEENOTES_CAN_DELETE_NOTE %}<a href="{{ note.U_DELETE }}">{{ lang('SEENOTES_DELETE_NOTE') }}<span class="sr-only">, {{ note.TIME }}</span></a>{% endif %}
+								</span>
+								{% endif %}
+							</div>
+							<div class="content">{{ note.TEXT }}</div>
+							{% if note.EDITED %}<div class="notice">{{ note.EDITED }}</div>{% endif %}
+						</article>
+					{% else %}
+						<p>{{ lang('SEENOTES_NO_NOTES') }}</p>
+					{% endfor %}
+				</div>
+			</section>
+		{% else %}
+			<p>{{ lang('SEENOTES_NO_ENTRIES') }}</p>
+		{% endfor %}
+
+		{% if S_SEENOTES_CAN_MANAGE and S_SEENOTES_HAS_CURRENT %}
+		<form method="post" action="{{ U_SEENOTES_ACTION }}">
+			<p>
+				<button type="submit" class="button" name="action" value="set_current" aria-describedby="seenotes-clear-explain">{{ lang('SEENOTES_CLEAR_CURRENT') }}</button>
+				<span id="seenotes-clear-explain">{{ lang('SEENOTES_CLEAR_CURRENT_EXPLAIN') }}</span>
+				<input type="hidden" name="entry_id" value="0">
+				{{ S_SEENOTES_HIDDEN_USER }}
+				{{ S_FORM_TOKEN }}
+			</p>
+		</form>
+		{% endif %}
+	</div>
+</div>
+
+{% if S_SEENOTES_EDITOR %}
+<form method="post" id="postform" action="{{ U_SEENOTES_ACTION }}">
+	<div class="panel" id="seenotes-editor">
+		<div class="inner">
+			<h3>{% if S_SEENOTES_EDITING %}{{ lang('SEENOTES_EDIT_NOTE') }}{% else %}{{ lang('SEENOTES_ADD_NOTE') }}{% endif %}</h3>
+			<fieldset class="fields1">
+				{% if not S_SEENOTES_EDITING %}
+				<dl>
+					<dt><label for="seenotes_entry_id">{{ lang('SEENOTES_NOTE_FOR') }}{{ lang('COLON') }}</label></dt>
+					<dd>
+						<select name="entry_id" id="seenotes_entry_id">
+							{% for option in loops.seenotes_editor_entries %}
+								<option value="{{ option.ID }}"{% if option.S_SELECTED %} selected{% endif %}>{{ option.TITLE }}</option>
+							{% endfor %}
+						</select>
+					</dd>
+				</dl>
+				{% endif %}
+				<label for="message" class="sr-only">{{ lang('SEENOTES_NOTE_TEXT') }}</label>
+				{% include 'posting_buttons.html' %}
+				<div id="message-box" class="message-box">
+					<textarea name="message" id="message" rows="10" cols="76" class="inputbox" aria-describedby="seenotes-format-status">{{ SEENOTES_EDITOR_TEXT }}</textarea>
+				</div>
+				<p id="seenotes-format-status">{{ SEENOTES_FORMAT_STATUS }}</p>
+			</fieldset>
+		</div>
+	</div>
+	<fieldset class="submit-buttons">
+		<input type="hidden" name="action" value="{% if S_SEENOTES_EDITING %}edit_note{% else %}add_note{% endif %}">
+		{% if S_SEENOTES_EDITING %}<input type="hidden" name="note_id" value="{{ SEENOTES_EDIT_NOTE_ID }}">{% endif %}
+		{{ S_SEENOTES_HIDDEN_USER }}
+		{{ S_FORM_TOKEN }}
+		{% if S_SEENOTES_EDITING %}<a href="{{ U_SEENOTES_ACTION }}" class="button">{{ lang('CANCEL') }}</a>{% endif %}
+		<input type="submit" name="submit_note" value="{{ lang('SEENOTES_SAVE_NOTE') }}" class="button1">
+	</fieldset>
+</form>
+{% endif %}
+
+{% if S_SEENOTES_CAN_MANAGE %}
+<form method="post" action="{{ U_SEENOTES_ACTION }}">
+	<div class="panel">
+		<div class="inner">
+			<h3>{{ lang('SEENOTES_ADD_ENTRY') }}</h3>
+			{% if loops.seenotes_reasons|length %}
+				<p id="seenotes-add-explain">{{ lang('SEENOTES_ADD_ENTRY_EXPLAIN') }}</p>
+				<fieldset>
+					<dl>
+						<dt><label for="seenotes_reason_id">{{ lang('SEENOTES_REASON') }}{{ lang('COLON') }}</label></dt>
+						<dd>
+							<select name="reason_id" id="seenotes_reason_id" required aria-describedby="seenotes-add-explain">
+								<option value="">{{ lang('SEENOTES_SELECT_REASON') }}</option>
+								{% for reason in loops.seenotes_reasons %}
+									<option value="{{ reason.ID }}"{% if reason.DESCRIPTION %} title="{{ reason.DESCRIPTION }}"{% endif %}>{{ reason.TITLE }}</option>
+								{% endfor %}
+							</select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>&nbsp;</dt>
+						<dd><label for="seenotes_entry_current"><input type="checkbox" name="entry_current" id="seenotes_entry_current" value="1" checked> {{ lang('SEENOTES_MAKE_IT_CURRENT') }}</label></dd>
+					</dl>
+				</fieldset>
+			{% else %}
+				<p>{{ lang('SEENOTES_NO_REASONS') }}</p>
+			{% endif %}
+		</div>
+	</div>
+	{% if loops.seenotes_reasons|length %}
+	<fieldset class="submit-buttons">
+		<input type="hidden" name="action" value="add_entry">
+		{{ S_SEENOTES_HIDDEN_USER }}
+		{{ S_FORM_TOKEN }}
+		<input type="submit" value="{{ lang('SEENOTES_ADD_ENTRY') }}" class="button1">
+	</fieldset>
+	{% endif %}
+</form>
+{% endif %}
+
+<div class="panel">
+	<div class="inner">
+		<h3>{{ lang('SEENOTES_USERNOTES') }}</h3>
+		<p>{{ lang('SEENOTES_USERNOTES_EXPLAIN') }}</p>
+		{% if loops.seenotes_usernotes|length %}
+			<table class="table1">
+				<thead>
+					<tr>
+						<th class="name">{{ lang('REPORT_BY') }}</th>
+						<th class="name">{{ lang('TIME') }}</th>
+						<th class="name">{{ lang('ACTION_NOTE') }}</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for usernote in loops.seenotes_usernotes %}
+					<tr class="{% if loop.index is odd %}bg1{% else %}bg2{% endif %}">
+						<td>{{ usernote.REPORT_BY }}</td>
+						<td>{{ usernote.REPORT_AT }}</td>
+						<td>{{ usernote.ACTION }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+			<p>{{ SEENOTES_USERNOTES_TOTAL }} &bull; <a href="{{ U_SEENOTES_USERNOTES }}">{{ lang('SEENOTES_USERNOTES_ALL') }}</a></p>
+		{% else %}
+			<p>{{ lang('SEENOTES_NO_USERNOTES') }}</p>
+		{% endif %}
+	</div>
+</div>
+
+{% endif %}
+
+{% include 'mcp_footer.html' %}

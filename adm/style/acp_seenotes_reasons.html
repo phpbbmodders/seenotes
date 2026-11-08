@@ -1,0 +1,104 @@
+{% include 'overall_header.html' %}
+
+<h1>{{ lang('ACP_SEENOTES_REASONS') }}</h1>
+
+{% if S_SEENOTES_EDIT %}
+
+	<a href="{{ U_BACK }}" style="float: {{ S_CONTENT_FLOW_END }};">&laquo; {{ lang('BACK') }}</a>
+	<h2>{% if S_SEENOTES_ADDING %}{{ lang('SEENOTES_ADD_REASON') }}{% else %}{{ lang('SEENOTES_EDIT_REASON') }}{% endif %}</h2>
+
+	{% if SEENOTES_ERROR %}<div class="errorbox" role="alert"><p>{{ SEENOTES_ERROR }}</p></div>{% endif %}
+
+	<form id="acp_seenotes_reason" method="post" action="{{ U_ACTION }}">
+		<fieldset>
+			<legend>{% if S_SEENOTES_ADDING %}{{ lang('SEENOTES_ADD_REASON') }}{% else %}{{ lang('SEENOTES_EDIT_REASON') }}{% endif %}</legend>
+			<dl>
+				<dt><label for="reason_title">{{ lang('SEENOTES_REASON_TITLE') }}{{ lang('COLON') }}</label><br><span id="reason_title_explain">{{ lang('SEENOTES_REASON_TITLE_EXPLAIN') }}</span></dt>
+				<dd><input type="text" id="reason_title" name="reason_title" value="{{ REASON_TITLE }}" maxlength="{{ REASON_MAX_LENGTH }}" required aria-describedby="reason_title_explain"></dd>
+			</dl>
+			<dl>
+				<dt><label for="reason_description">{{ lang('SEENOTES_REASON_DESCRIPTION') }}{{ lang('COLON') }}</label><br><span id="reason_description_explain">{{ lang('SEENOTES_REASON_DESCRIPTION_EXPLAIN') }}{% if S_SEENOTES_REQUIRE_DESCRIPTION %} {{ lang('SEENOTES_REASON_DESCRIPTION_REQUIRED') }}{% endif %}</span></dt>
+				<dd><input type="text" id="reason_description" name="reason_description" value="{{ REASON_DESCRIPTION }}" maxlength="{{ REASON_MAX_LENGTH }}" size="60"{% if S_SEENOTES_REQUIRE_DESCRIPTION %} required{% endif %} aria-describedby="reason_description_explain"></dd>
+			</dl>
+			<dl>
+				<dt><label for="reason_color">{{ lang('SEENOTES_REASON_COLOR') }}{{ lang('COLON') }}</label><br><span id="reason_color_explain">{{ lang('SEENOTES_REASON_COLOR_EXPLAIN') }}</span></dt>
+				<dd><input type="color" id="reason_color" name="reason_color" value="#{{ REASON_COLOR|lower }}" aria-describedby="reason_color_explain"></dd>
+			</dl>
+		</fieldset>
+		<fieldset class="submit-buttons">
+			<legend>{{ lang('SUBMIT') }}</legend>
+			<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}">
+			{{ S_FORM_TOKEN }}
+		</fieldset>
+	</form>
+
+{% elseif S_SEENOTES_DELETE_STEP1 or S_SEENOTES_DELETE_STEP2 %}
+
+	<h2>{{ lang('SEENOTES_DELETE_REASON') }}</h2>
+	<div class="errorbox">
+		<p>{{ SEENOTES_DELETE_SUMMARY }}</p>
+	</div>
+
+	<form id="acp_seenotes_delete" method="post" action="{{ U_ACTION }}">
+		{% if S_SEENOTES_DELETE_STEP2 %}
+		<fieldset>
+			<legend>{{ lang('SEENOTES_DELETE_REASON') }}</legend>
+			<dl>
+				<dt><label for="confirm_name">{{ lang('SEENOTES_DELETE_TYPE_NAME', REASON_TITLE) }}</label></dt>
+				<dd><input type="text" id="confirm_name" name="confirm_name" value="" autocomplete="off" spellcheck="false" required data-seenotes-name="{{ REASON_TITLE }}"></dd>
+			</dl>
+		</fieldset>
+		{% endif %}
+		<fieldset class="submit-buttons">
+			<legend>{{ lang('SUBMIT') }}</legend>
+			{% if S_SEENOTES_DELETE_STEP2 %}
+				<input class="button1" type="submit" id="seenotes_delete_final" name="submit" value="{{ lang('SEENOTES_DELETE_FINAL') }}">
+			{% else %}
+				<input class="button1" type="submit" name="submit" value="{{ lang('SEENOTES_DELETE_CONTINUE') }}">
+			{% endif %}
+			<input class="button2" type="submit" name="cancel" value="{{ lang('CANCEL') }}" formnovalidate>
+			{{ S_FORM_TOKEN }}
+		</fieldset>
+	</form>
+	{% if S_SEENOTES_DELETE_STEP2 %}{% INCLUDEJS '@phpbbmodders_seenotes/seenotes_delete.js' %}{% endif %}
+
+{% else %}
+
+	<p>{{ lang('ACP_SEENOTES_REASONS_EXPLAIN') }}</p>
+
+	{% if loops.reasons|length %}
+	<table class="table1 zebra-table">
+		<thead>
+			<tr>
+				<th>{{ lang('SEENOTES_REASON_TITLE') }}</th>
+				<th>{{ lang('SEENOTES_REASON_DESCRIPTION') }}</th>
+				<th>{{ lang('SEENOTES_STATUS') }}</th>
+				<th>{{ lang('ACTION') }}</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for reason in loops.reasons %}
+			<tr>
+				<td><strong style="color: #{{ reason.COLOR }};">{{ reason.TITLE }}</strong></td>
+				<td>{{ reason.DESCRIPTION }}</td>
+				<td>{% if reason.S_ACTIVE %}{{ lang('SEENOTES_STATUS_ON') }}{% else %}{{ lang('SEENOTES_STATUS_OFF') }}{% endif %}</td>
+				<td class="actions">
+					{% if loop.first %}{{ ICON_MOVE_UP_DISABLED }}{% else %}<a href="{{ reason.U_MOVE_UP }}">{{ ICON_MOVE_UP }}<span class="sr-only">{{ lang('SEENOTES_MOVE_UP') }}{{ lang('COLON') }} {{ reason.TITLE }}</span></a>{% endif %}
+					{% if loop.last %}{{ ICON_MOVE_DOWN_DISABLED }}{% else %}<a href="{{ reason.U_MOVE_DOWN }}">{{ ICON_MOVE_DOWN }}<span class="sr-only">{{ lang('SEENOTES_MOVE_DOWN') }}{{ lang('COLON') }} {{ reason.TITLE }}</span></a>{% endif %}
+					<a href="{{ reason.U_EDIT }}">{{ ICON_EDIT }}<span class="sr-only">{{ lang('EDIT') }}{{ lang('COLON') }} {{ reason.TITLE }}</span></a>
+					<a href="{{ reason.U_TOGGLE }}">{% if reason.S_ACTIVE %}{{ lang('SEENOTES_SWITCH_OFF') }}{% else %}{{ lang('SEENOTES_SWITCH_ON') }}{% endif %}<span class="sr-only">{{ lang('COLON') }} {{ reason.TITLE }}</span></a>
+					{% if S_SEENOTES_HARD_DELETE %}<a href="{{ reason.U_DELETE }}">{{ ICON_DELETE }}<span class="sr-only">{{ lang('SEENOTES_DELETE_REASON') }}{{ lang('COLON') }} {{ reason.TITLE }}</span></a>{% endif %}
+				</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	{% else %}
+		<p><strong>{{ lang('SEENOTES_NO_REASONS_YET') }}</strong></p>
+	{% endif %}
+
+	<p class="quick"><a href="{{ U_SEENOTES_ADD }}" class="button2">{{ lang('SEENOTES_ADD_REASON') }}</a></p>
+
+{% endif %}
+
+{% include 'overall_footer.html' %}

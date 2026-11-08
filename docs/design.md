@@ -1,6 +1,6 @@
 # See Notes: design
 
-Status: **design stage, no code yet.** This document records what has been agreed so far, so it can be reviewed before work starts. Feedback goes in the design issue.
+This document records the agreed design. The extension follows it; changes to the design go in an issue or discussion first.
 
 ## What it does
 
@@ -43,10 +43,10 @@ The display still looks like a profile field.
 
 ## Entries and notes
 
-- A member can have **any number of reason entries**. Each entry records its reason, the date it was added and who added it.
+- A member can have **any number of reason entries**. Each entry records its reason, the date it was added and who added it (the name is saved, like a note author's).
 - Entries are kept until someone deletes them.
 - **At most one entry is current.** Staff can switch which entry is current, or set none. When none is current, nothing shows on the member's profile, but the entries and notes are still there in the MCP.
-- Each entry has its own list of **notes**, like phpBB's user notes: author, date and text. Notes are plain text, shown escaped. Notes can be edited and deleted; an edited note shows who last edited it and when.
+- Each entry has its own list of **notes**, like phpBB's user notes: author, date and text. Notes use the board's normal BBCode handling, the same way private messages do: standard and custom BBCodes, smilies and automatic links, each following the board's own on/off setting. The note form has the usual BBCode buttons, so a private message sent to the member can be pasted in a quote for other staff to read. Notes can be edited and deleted; an edited note shows who last edited it and when.
 - Deleting an entry deletes its notes.
 - The author's and last editor's usernames are saved with each note. While they are members, their name links to their profile. If one of them is deleted, the note keeps their name as plain text with no link, the way phpBB keeps a deleted member's name on their posts. Saved names are updated when a member is renamed (`core.update_username`).
 - When the member the notes are about is deleted, their entries and notes are deleted too.
@@ -104,8 +104,8 @@ Moderator permissions can be set globally or per forum. Having one in any forum 
 | Table | Columns |
 |---|---|
 | `seenotes_reasons` | `reason_id`, `reason_title`, `reason_description`, `reason_color`, `reason_order`, `reason_active` |
-| `seenotes_entries` | `entry_id`, `user_id`, `reason_id`, `entry_time`, `entry_author_id`, `entry_current` |
-| `seenotes_notes` | `note_id`, `entry_id`, `note_author_id`, `note_author_name`, `note_time`, `note_text`, `note_edit_time`, `note_edit_user_id`, `note_edit_user_name` |
+| `seenotes_entries` | `entry_id`, `user_id`, `reason_id`, `entry_time`, `entry_author_id`, `entry_author_name`, `entry_current` |
+| `seenotes_notes` | `note_id`, `entry_id`, `note_author_id`, `note_author_name`, `note_time`, `note_text`, `note_bbcode_uid`, `note_bbcode_bitfield`, `note_bbcode_options`, `note_edit_time`, `note_edit_user_id`, `note_edit_user_name` |
 
 Setting an entry as current clears the flag on the member's other entries in the same transaction.
 
@@ -115,7 +115,7 @@ Config: `seenotes_label` (the label), `seenotes_require_description` (off) and `
 
 Other events: `core.permissions`, `core.delete_user_after`, `core.update_username`. No new phpBB events are needed.
 
-Same as the other phpbbmodders extensions: `ext.php` minimum version checks (phpBB 3.3.19, PHP 7.4), `extra.version-check` once a phpBB.com listing exists, the org's strict EPV workflow plus lint and tests, screen-reader text on icon-only controls, and language strings for everything shown.
+Same as the other phpbbmodders extensions: `ext.php` minimum version checks (phpBB 3.3.19, PHP 8.3.36), `extra.version-check` once a phpBB.com listing exists, the org's strict EPV workflow plus lint and tests, screen-reader text on icon-only controls, and language strings for everything shown.
 
 ## Privacy
 
