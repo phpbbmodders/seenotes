@@ -22,7 +22,7 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
-	'SEENOTES_NOT_ENABLEABLE'	=> 'See Notes could not be enabled. It needs phpBB 3.3.19 or later and PHP 8.3.36 or later.',
+	'SEENOTES_NOT_ENABLEABLE'	=> 'See Notes could not be enabled. It needs phpBB 3.3.19 or later and PHP 8.1 or later.',
 
 	// Starter reasons, added once when the extension is first enabled. They
 	// are stored in the board's default language and can then be edited in
