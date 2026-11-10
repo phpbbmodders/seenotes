@@ -117,7 +117,7 @@ Config: `seenotes_label` (the label), `seenotes_require_description` (off) and `
 
 Other events: `core.permissions`, `core.delete_user_after`, `core.update_username`. No new phpBB events are needed.
 
-Same as the other phpbbmodders extensions: `ext.php` minimum version checks (phpBB 3.3.19, PHP 8.3.36), `extra.version-check` once a phpBB.com listing exists, the org's strict EPV workflow plus lint and tests, screen-reader text on icon-only controls, and language strings for everything shown.
+Same as the other phpbbmodders extensions: `ext.php` minimum version checks (phpBB 3.3.19, PHP 8.1), `extra.version-check` once a phpBB.com listing exists, the org's strict EPV workflow plus lint and tests, screen-reader text on icon-only controls, and language strings for everything shown.
 
 ## Privacy
 
