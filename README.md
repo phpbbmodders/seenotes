@@ -1,4 +1,3 @@
-admin	KbTest1234!
 # See Notes
 
 [![Tests](https://github.com/phpbbmodders/seenotes/actions/workflows/tests.yml/badge.svg)](https://github.com/phpbbmodders/seenotes/actions/workflows/tests.yml) [![Lint](https://github.com/phpbbmodders/seenotes/actions/workflows/lint.yml/badge.svg)](https://github.com/phpbbmodders/seenotes/actions/workflows/lint.yml)
